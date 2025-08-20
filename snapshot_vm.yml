@@ -29,10 +29,10 @@
     - name: snapshot_name
       prompt: "Enter a name for the snapshot (e.g., 'pre-rke2-upgrade')"
       private: no
-    - name: snapshot_description
-      prompt: "Enter a description for the snapshot"
-      private: no
-      default: "Snapshot created via Ansible on {{ ansible_date_time.iso8601 }}"
+    # - name: snapshot_description
+    #   prompt: "Enter a description for the snapshot"
+    #   private: no
+    #   default: "Snapshot created via Ansible on {{ ansible_date_time.iso8601 }}"
 
   tasks:
     - name: Create a snapshot for VM '{{ inventory_hostname }}'
@@ -46,7 +46,7 @@
         name: "{{ inventory_hostname }}"
         state: present
         snapshot_name: "{{ snapshot_name }}"
-        description: "{{ snapshot_description }}"
+        #description: "{{ snapshot_description }}"
         memory_dump: "{{ snapshot_memory_dump }}" # ใช้ตัวแปรจากไฟล์
         quiesce: "{{ snapshot_quiesce }}"      # ใช้ตัวแปรจากไฟล์
       delegate_to: localhost
