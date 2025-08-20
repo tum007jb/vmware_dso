@@ -9,6 +9,7 @@ vcenter_user: "sutayossri@vsphere.local" # สามารถใส่ค่า 
 # VMware Environment Specifics
 vcenter_datacenter: "DSO"
 vcenter_validate_certs: false
+vm_folder: "/DSO/vm/Tum-VM/RKE"
 
 # Snapshot Configuration
 snapshot_memory_dump: false

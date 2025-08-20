@@ -45,6 +45,7 @@
         datacenter: "{{ vcenter_datacenter }}" # ใช้ตัวแปรจากไฟล์
         name: "{{ inventory_hostname }}"
         state: present
+        folder: "{{ vm_folder }}"
         snapshot_name: "{{ snapshot_name }}"
         #description: "{{ snapshot_description }}"
         memory_dump: "{{ snapshot_memory_dump }}" # ใช้ตัวแปรจากไฟล์
