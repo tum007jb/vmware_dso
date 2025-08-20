@@ -6,6 +6,12 @@
 
   vars_files:
     - vars/vsphere_config.yml # <--- บรรทัดนี้คือการดึงตัวแปรจากไฟล์อื่นเข้ามา
+  
+  pre_tasks:
+    - name: Gather facts from the control node (localhost)
+      ansible.builtin.setup:
+      delegate_to: localhost
+      run_once: true # <--- ทำแค่ครั้งเดียวสำหรับทั้ง Playbook run
 
   vars_prompt:
     # เรายังคงถามข้อมูลที่อาจเปลี่ยนแปลงบ่อยหรือไม่ควรเก็บเป็น Plain text
