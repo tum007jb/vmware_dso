@@ -1,0 +1,15 @@
+# vars/vsphere_config.yml
+
+# VMware vSphere Connection Details
+# เราจะยังคงใช้ vars_prompt ใน playbook เพื่อถามค่าเหล่านี้เพื่อความปลอดภัย
+# แต่เราสามารถกำหนดค่า default หรือค่าที่ไม่ sensitive ที่นี่ได้
+vcenter_hostname: "192.168.172.10" # สามารถใส่ค่า default หรือปล่อยว่างไว้
+vcenter_user: "sutayossri@vsphere.local" # สามารถใส่ค่า default หรือปล่อยว่างไว้
+
+# VMware Environment Specifics
+vcenter_datacenter: "DSO"
+vcenter_validate_certs: false
+
+# Snapshot Configuration
+snapshot_memory_dump: false
+snapshot_quiesce: true

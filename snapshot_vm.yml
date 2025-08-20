@@ -1,0 +1,52 @@
+# snapshot_vm.yml
+- name: Create VMware VM Snapshots
+  hosts: vmware_hosts
+  gather_facts: false
+  connection: local
+
+  vars_files:
+    - vars/vsphere_config.yml # <--- บรรทัดนี้คือการดึงตัวแปรจากไฟล์อื่นเข้ามา
+
+  vars_prompt:
+    # เรายังคงถามข้อมูลที่อาจเปลี่ยนแปลงบ่อยหรือไม่ควรเก็บเป็น Plain text
+    - name: vcenter_hostname
+      prompt: "Enter vCenter FQDN or IP"
+      private: no
+      default: "{{ vcenter_hostname }}" # ดึงค่า default จากไฟล์ตัวแปร
+    - name: vcenter_user
+      prompt: "Enter vCenter username"
+      private: no
+      default: "{{ vcenter_user }}" # ดึงค่า default จากไฟล์ตัวแปร
+    - name: vcenter_pass
+      prompt: "Enter vCenter password"
+      private: yes
+    - name: snapshot_name
+      prompt: "Enter a name for the snapshot (e.g., 'pre-rke2-upgrade')"
+      private: no
+    - name: snapshot_description
+      prompt: "Enter a description for the snapshot"
+      private: no
+      default: "Snapshot created via Ansible on {{ ansible_date_time.iso8601 }}"
+
+  tasks:
+    - name: Create a snapshot for VM '{{ inventory_hostname }}'
+      community.vmware.vmware_guest_snapshot:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+        validate_certs: "{{ vcenter_validate_certs }}" # ใช้ตัวแปรจากไฟล์
+
+        datacenter: "{{ vcenter_datacenter }}" # ใช้ตัวแปรจากไฟล์
+        name: "{{ inventory_hostname }}"
+        state: present
+        snapshot_name: "{{ snapshot_name }}"
+        description: "{{ snapshot_description }}"
+        memory_dump: "{{ snapshot_memory_dump }}" # ใช้ตัวแปรจากไฟล์
+        quiesce: "{{ snapshot_quiesce }}"      # ใช้ตัวแปรจากไฟล์
+      delegate_to: localhost
+      register: snapshot_result
+
+    - name: Display snapshot creation result
+      ansible.builtin.debug:
+        msg: "Snapshot '{{ snapshot_name }}' for VM '{{ inventory_hostname }}' has been created successfully."
+      when: snapshot_result.changed
